@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Project, ProjectImage, TechStack } from '../../types/Project';
 import MarkdownEditor from './MarkdownEditor';
 import MultiImageUploader from './MultiImageUploader';
+import JsonEditor from './JsonEditor';
 import './EnhancedProjectEditor.css';
 
 interface EnhancedProjectEditorProps {
@@ -39,7 +40,7 @@ const EnhancedProjectEditor: React.FC<EnhancedProjectEditorProps> = ({
 
   const [techStackInput, setTechStackInput] = useState({ category: '', items: '' });
   const [tagInput, setTagInput] = useState('');
-  const [activeTab, setActiveTab] = useState<'basic' | 'content' | 'images' | 'layout' | 'seo'>('basic');
+  const [activeTab, setActiveTab] = useState<'basic' | 'content' | 'images' | 'layout' | 'seo' | 'json'>('basic');
 
   useEffect(() => {
     setFormData({ ...formData, ...project });
@@ -501,6 +502,12 @@ const EnhancedProjectEditor: React.FC<EnhancedProjectEditorProps> = ({
         >
           🔍 SEO
         </button>
+        <button 
+          className={`tab ${activeTab === 'json' ? 'active' : ''}`}
+          onClick={() => setActiveTab('json')}
+        >
+          🚀 JSON Editor
+        </button>
       </nav>
 
       <form onSubmit={handleSubmit} className="editor-form">
@@ -509,6 +516,16 @@ const EnhancedProjectEditor: React.FC<EnhancedProjectEditorProps> = ({
         {activeTab === 'images' && renderImagesTab()}
         {activeTab === 'layout' && renderLayoutTab()}
         {activeTab === 'seo' && renderSEOTab()}
+        {activeTab === 'json' && (
+          <div className="tab-content">
+            <JsonEditor 
+              project={formData}
+              onProjectUpdate={(updatedProject) => {
+                setFormData({ ...formData, ...updatedProject });
+              }}
+            />
+          </div>
+        )}
 
         <div className="form-actions">
           <button type="submit" className="btn-primary">
