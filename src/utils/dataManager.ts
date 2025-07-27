@@ -38,7 +38,7 @@ export class DataManager {
     }
   }
 
-  static exportToFile(projects: Project[]): void {
+  static exportToFile(projects: LegacyProject[]): void {
     const data = {
       projects,
       lastUpdated: new Date().toISOString(),
@@ -109,7 +109,7 @@ export class DataManager {
     localStorage.removeItem(BACKUP_KEY);
   }
 
-  private static getDefaultProjects(): Project[] {
+  private static getDefaultProjects(): LegacyProject[] {
     // Return the original projects as default
     return [
       {
@@ -140,7 +140,7 @@ export class DataManager {
     ];
   }
 
-  static generateGitCommands(projects: Project[], commitMessage: string = 'Update portfolio data'): string[] {
+  static generateGitCommands(projects: LegacyProject[], commitMessage: string = 'Update portfolio data'): string[] {
     return [
       '# Portfolio deployment commands',
       '# Run these commands in your terminal',
@@ -163,7 +163,7 @@ export class DataManager {
     ];
   }
 
-  static downloadGitCommands(projects: Project[], commitMessage: string): void {
+  static downloadGitCommands(projects: LegacyProject[], commitMessage: string): void {
     const commands = this.generateGitCommands(projects, commitMessage);
     const content = commands.join('\n');
     
