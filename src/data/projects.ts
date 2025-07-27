@@ -1,6 +1,6 @@
-import { Project } from '../types/Project';
+import { LegacyProject } from '../types/Project';
 
-export const projects: Project[] = [
+export const projects: LegacyProject[] = [
   {
     id: "1",
     title: "01 Hardware Store Smart Search",

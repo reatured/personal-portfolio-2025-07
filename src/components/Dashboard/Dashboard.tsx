@@ -35,16 +35,14 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleProjectSave = async (project: Project) => {
+  const handleProjectSave = async (project: Partial<Project>) => {
     try {
-      let savedProject: Project;
-      
       if (selectedProject?.id && selectedProject.id !== '') {
         // Update existing project
-        savedProject = await SupabaseService.updateProject(project.id, project);
+        await SupabaseService.updateProject(project.id!, project as Project);
       } else {
         // Create new project
-        savedProject = await SupabaseService.createProject(project);
+        await SupabaseService.createProject(project as Project);
       }
       
       // Reload projects to get fresh data

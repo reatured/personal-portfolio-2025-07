@@ -1,10 +1,10 @@
-import { Project } from '../types/Project';
+import { LegacyProject } from '../types/Project';
 
 const DATA_KEY = 'portfolioProjects';
 const BACKUP_KEY = 'portfolioProjectsBackup';
 
 export class DataManager {
-  static saveProjects(projects: Project[]): void {
+  static saveProjects(projects: LegacyProject[]): void {
     try {
       // Save current data as backup before updating
       const currentData = localStorage.getItem(DATA_KEY);
@@ -23,7 +23,7 @@ export class DataManager {
     }
   }
 
-  static loadProjects(): Project[] {
+  static loadProjects(): LegacyProject[] {
     try {
       const data = localStorage.getItem(DATA_KEY);
       if (data) {

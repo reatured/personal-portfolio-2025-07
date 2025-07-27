@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.css';
 import Layout from './components/Layout';
-import ProjectCard from './components/ProjectCard';
+import EnhancedProjectCard from './components/EnhancedProjectCard';
 import Dashboard from './components/Dashboard/Dashboard';
 import ProjectPage from './components/ProjectPage/ProjectPage';
 import { projects } from './data/projects';
@@ -22,7 +22,7 @@ function App() {
           <Layout>
             <div className="portfolio-container">
               {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+                <EnhancedProjectCard key={project.id} project={project} />
               ))}
             </div>
           </Layout>

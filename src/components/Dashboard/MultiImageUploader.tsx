@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ProjectImage } from '../../types/Project';
-import { CloudinaryService } from '../../utils/cloudinary';
+import { VercelBlobService } from '../../utils/vercelBlob';
 import { SupabaseService } from '../../utils/supabase';
 import './MultiImageUploader.css';
 
@@ -54,25 +54,20 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
       // Update progress
       setUploadProgress(prev => ({ ...prev, [fileId]: 0 }));
 
-      // Upload to Cloudinary
-      const uploadResult = await CloudinaryService.uploadImage(file, {
+      // Upload to Vercel Blob
+      const uploadResult = await VercelBlobService.uploadImage(file, {
         folder: 'portfolio/projects',
-        public_id: `${projectId || 'temp'}-${Date.now()}`,
-        transformation: [
-          { width: 1200, height: 800, crop: 'limit', quality: 'auto' },
-          { format: 'auto' }
-        ]
+        filename: `${projectId || 'temp'}-${Date.now()}-${file.name}`
       });
 
       setUploadProgress(prev => ({ ...prev, [fileId]: 50 }));
 
-      // Generate thumbnail
-      const thumbnailUrl = CloudinaryService.generateUrl(uploadResult.public_id, {
+      // Generate optimized URLs
+      const thumbnailUrl = VercelBlobService.getOptimizedUrl(uploadResult.url, {
         width: 300,
         height: 200,
-        crop: 'fill',
-        quality: 'auto',
-        format: 'auto'
+        quality: 85,
+        format: 'webp'
       });
 
       setUploadProgress(prev => ({ ...prev, [fileId]: 80 }));
@@ -80,20 +75,21 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
       // Create image data
       const imageData: Omit<ProjectImage, 'id' | 'created_at'> = {
         project_id: projectId || '',
-        url: uploadResult.secure_url,
+        url: uploadResult.url,
         thumbnail_url: thumbnailUrl,
         alt_text: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
         caption: '',
-        width: uploadResult.width,
-        height: uploadResult.height,
-        file_size: file.size,
-        format: uploadResult.format,
+        width: 0, // Will be populated when image loads
+        height: 0, // Will be populated when image loads
+        file_size: uploadResult.size,
+        format: file.type.split('/')[1] || 'unknown',
         order_index: images.length + newImages.length,
         is_featured: newImages.length === 0 && images.length === 0, // First image is featured
         display_type: 'gallery',
         settings: {
-          public_id: uploadResult.public_id,
-          cloudinary_url: uploadResult.secure_url
+          vercel_pathname: uploadResult.pathname,
+          vercel_url: uploadResult.url,
+          download_url: uploadResult.downloadUrl
         }
       };
 

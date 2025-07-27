@@ -203,7 +203,8 @@ export const MarkdownContent: React.FC<{ content: string; className?: string }> 
           </figure>
         ),
         // Custom code block with syntax highlighting
-        code: ({ node, inline, className, children, ...props }) => {
+        code: ({ className, children, ...props }: any) => {
+          const inline = props.inline;
           const match = /language-(\w+)/.exec(className || '');
           return !inline && match ? (
             <div className="code-block">
@@ -216,7 +217,7 @@ export const MarkdownContent: React.FC<{ content: string; className?: string }> 
                   Copy
                 </button>
               </div>
-              <pre {...props} className={className}>
+              <pre className={className}>
                 <code>{children}</code>
               </pre>
             </div>

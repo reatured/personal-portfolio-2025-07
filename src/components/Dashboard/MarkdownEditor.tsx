@@ -198,7 +198,6 @@ What would you do differently next time?`
         height={height}
         data-color-mode="light"
         commands={[
-          ...MDEditor.commands.getCommands(),
           ...customCommands
         ]}
         textareaProps={{

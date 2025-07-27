@@ -43,7 +43,7 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
       const items = techStackInput.items.split(',').map(item => item.trim()).filter(Boolean);
       setFormData(prev => ({
         ...prev,
-        techStack: [...prev.techStack, { category: techStackInput.category, items }]
+        tech_stack: [...(prev.tech_stack || []), { category: techStackInput.category, items }]
       }));
       setTechStackInput({ category: '', items: '' });
     }
@@ -52,14 +52,14 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
   const handleTechStackRemove = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      techStack: prev.techStack.filter((_, i) => i !== index)
+      tech_stack: (prev.tech_stack || []).filter((_, i) => i !== index)
     }));
   };
 
   const handleTechStackEdit = (index: number, field: 'category' | 'items', value: string) => {
     setFormData(prev => ({
       ...prev,
-      techStack: prev.techStack.map((tech, i) => 
+      tech_stack: (prev.tech_stack || []).map((tech, i) => 
         i === index 
           ? { 
               ...tech, 
@@ -76,7 +76,7 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
       alert('Please fill in required fields');
       return;
     }
-    onSave(formData);
+    onSave(formData as Project);
   };
 
   return (
@@ -114,8 +114,8 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
           <input
             id="imagePath"
             type="text"
-            value={formData.imagePath}
-            onChange={(e) => handleInputChange('imagePath', e.target.value)}
+            value={formData.featured_image_url || ''}
+            onChange={(e) => handleInputChange('featured_image_url', e.target.value)}
             placeholder="/images/projects/project-01.jpg"
           />
         </div>
@@ -125,8 +125,8 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
           <input
             id="hoverImagePath"
             type="text"
-            value={formData.hoverImagePath || ''}
-            onChange={(e) => handleInputChange('hoverImagePath', e.target.value)}
+            value={formData.hover_image_url || ''}
+            onChange={(e) => handleInputChange('hover_image_url', e.target.value)}
             placeholder="/images/projects/project-01-hover.jpg"
           />
         </div>
@@ -136,8 +136,8 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
           <input
             id="link"
             type="text"
-            value={formData.link}
-            onChange={(e) => handleInputChange('link', e.target.value)}
+            value={formData.live_url || ''}
+            onChange={(e) => handleInputChange('live_url', e.target.value)}
             placeholder="Page-1 or https://example.com"
           />
         </div>
@@ -145,7 +145,7 @@ const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel
         <div className="form-group">
           <label>Tech Stack</label>
           
-          {formData.techStack.map((tech, index) => (
+          {(formData.tech_stack || []).map((tech, index) => (
             <div key={index} className="tech-stack-item">
               <input
                 type="text"
