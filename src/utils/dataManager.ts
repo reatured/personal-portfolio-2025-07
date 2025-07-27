@@ -87,7 +87,7 @@ export class DataManager {
     });
   }
 
-  static getBackup(): Project[] | null {
+  static getBackup(): LegacyProject[] | null {
     try {
       const backup = localStorage.getItem(BACKUP_KEY);
       return backup ? JSON.parse(backup) : null;
