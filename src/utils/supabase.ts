@@ -48,25 +48,50 @@ export class SupabaseService {
   }
 
   static async createProject(project: Partial<Project>): Promise<Project | null> {
-    // Generate slug from title
-    const slug = project.title?.toLowerCase()
+    // Generate unique slug from title
+    const baseSlug = project.title?.toLowerCase()
       .replace(/[^a-z0-9\s]/g, '')
       .replace(/\s+/g, '-')
-      .substring(0, 50)
+      .substring(0, 40) || 'untitled-project'
+    
+    const timestamp = Date.now().toString(36)
+    const slug = `${baseSlug}-${timestamp}`
+
+    // Ensure we have all required fields with defaults
+    const projectData = {
+      title: project.title || 'Untitled Project',
+      description: project.description || '',
+      markdown_content: project.markdown_content || '',
+      slug,
+      featured_image_url: project.featured_image_url || null,
+      hover_image_url: project.hover_image_url || null,
+      tech_stack: project.tech_stack || [],
+      live_url: project.live_url || null,
+      github_url: project.github_url || null,
+      case_study_url: project.case_study_url || null,
+      page_layout: project.page_layout || 'default',
+      custom_css: project.custom_css || null,
+      page_settings: project.page_settings || null,
+      meta_title: project.meta_title || null,
+      meta_description: project.meta_description || null,
+      tags: project.tags || null,
+      order_index: project.order_index ?? 999,
+      status: project.status || 'draft',
+      featured: project.featured || false,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      published_at: project.status === 'published' ? new Date().toISOString() : null
+    }
 
     const { data, error } = await supabase
       .from('projects')
-      .insert([{
-        ...project,
-        slug,
-        order_index: project.order_index ?? 999
-      }])
+      .insert([projectData])
       .select()
       .single()
 
     if (error) {
       console.error('Error creating project:', error)
-      return null
+      throw new Error(`Failed to create project: ${error.message}`)
     }
 
     return data
