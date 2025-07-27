@@ -23,14 +23,25 @@ const Dashboard: React.FC = () => {
       setProjects(loadedProjects);
     } catch (error) {
       console.error('Error loading projects:', error);
-      // Fallback to legacy data
+      // Fallback to legacy data - convert to new format
       try {
         const { DataManager } = await import('../../utils/dataManager');
         const legacyProjects = DataManager.loadProjects();
-        setProjects(legacyProjects);
+        const convertedProjects = legacyProjects.map(legacy => ({
+          ...legacy,
+          slug: legacy.title.toLowerCase().replace(/\s+/g, '-'),
+          tech_stack: legacy.techStack,
+          page_layout: 'default' as const,
+          order_index: parseInt(legacy.id),
+          status: 'published' as const,
+          featured: false,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }));
+        setProjects(convertedProjects);
       } catch (legacyError) {
-        const { projects } = await import('../../data/projects');
-        setProjects(projects);
+        // Set empty array if all fallbacks fail
+        setProjects([]);
       }
     }
   };
