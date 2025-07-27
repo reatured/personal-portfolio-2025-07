@@ -59,7 +59,7 @@ export class DataManager {
     URL.revokeObjectURL(url);
   }
 
-  static importFromFile(file: File): Promise<Project[]> {
+  static importFromFile(file: File): Promise<LegacyProject[]> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       
