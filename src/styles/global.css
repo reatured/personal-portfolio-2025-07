@@ -1,0 +1,267 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+/* Layout Styles */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 30%;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 2rem;
+  background-color: #fafafa;
+  border-right: 1px solid #e0e0e0;
+}
+
+.main-content {
+  width: 70%;
+  margin-left: 30%;
+  padding: 2rem;
+}
+
+/* Profile Header */
+.profile-header {
+  margin-bottom: 2rem;
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.name .home-link {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: inherit;
+}
+
+.job-title {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 1rem;
+}
+
+/* Profile Content */
+.profile-image-container {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.profile-image {
+  width: 34.5%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.bio {
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.bio p {
+  margin: 0 0 1rem 0;
+}
+
+.bio-link {
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.bio-link:hover {
+  text-decoration: underline;
+}
+
+.contact-links {
+  margin-top: 2rem;
+}
+
+.contact-link {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
+/* Shared Component Styles */
+.card-container {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.card-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.card-image-container {
+  width: 100%;
+}
+
+.card-details {
+  padding: 1rem;
+}
+
+.card-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.card-subtitle {
+  margin: 0 0 1rem 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.card-description {
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.card-list li {
+  margin-bottom: 0.5em;
+}
+
+.card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}
+
+/* Image Styles */
+.zoomable {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hover-image-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.hover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hover-image.visible {
+  opacity: 1;
+}
+
+.base-image {
+  position: relative;
+  z-index: 1;
+}
+
+/* Dividers */
+.divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 2rem 0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    position: static;
+    height: auto;
+    padding: 1rem;
+  }
+  
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+    padding: 1rem;
+  }
+  
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .card-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .card-details {
+    padding: 0.5rem;
+  }
+  
+  .profile-image {
+    width: 50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    padding: 0.5rem;
+  }
+  
+  .main-content {
+    padding: 0.5rem;
+  }
+  
+  .bio {
+    font-size: 0.9rem;
+  }
+  
+  .profile-image {
+    width: 60%;
+  }
+}

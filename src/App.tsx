@@ -1,25 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './styles/global.css';
+import Layout from './components/Layout';
+import ProjectCard from './components/ProjectCard';
+import Dashboard from './components/Dashboard/Dashboard';
+import { projects } from './data/projects';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Dashboard Route */}
+        <Route path="/admin" element={<Dashboard />} />
+        
+        {/* Main Portfolio Route */}
+        <Route path="/" element={
+          <Layout>
+            <div className="portfolio-container">
+              {projects.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </div>
+          </Layout>
+        } />
+      </Routes>
+    </Router>
   );
 }
 

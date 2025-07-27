@@ -1,0 +1,11 @@
+Add your project images here:
+- project-01.jpg (Hardware Store Smart Search)
+- project-01-hover.jpg (Hardware Store Smart Search hover)
+- project-02.jpg (AR Drawing Tool)
+- project-03.jpg (Personal Schedule Assistant)
+- project-04.jpg (3D Printed Hook)
+- project-05.jpg (Just Another Day)
+- project-06.jpg (No Job Too Small)
+- project-07.jpg (Task Tracker App)
+- project-08.jpg (VR Experience on Oculus Quest)
+- project-09.jpg (Creative Coding Experiments)

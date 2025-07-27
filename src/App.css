@@ -1,38 +1,103 @@
 .App {
-  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.portfolio-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  gap: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+.project-card {
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.project-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.project-image-container {
+  width: 100%;
+}
+
+.hover-image-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.zoomable {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hover-image.visible {
+  opacity: 1;
+}
+
+.base-image {
+  position: relative;
+  z-index: 1;
+}
+
+.project-details {
+  padding: 0;
+}
+
+.project-details h1 {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.project-details h2 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.project-description {
+  line-height: 1.6;
+  margin: 0;
+}
+
+.lineated {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.lineated li {
+  margin-bottom: 0.5em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+  .project-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .App {
+    padding: 10px;
   }
 }
