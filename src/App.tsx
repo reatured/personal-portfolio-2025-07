@@ -4,6 +4,7 @@ import './styles/global.css';
 import Layout from './components/Layout';
 import ProjectCard from './components/ProjectCard';
 import Dashboard from './components/Dashboard/Dashboard';
+import ProjectPage from './components/ProjectPage/ProjectPage';
 import { projects } from './data/projects';
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
       <Routes>
         {/* Dashboard Route */}
         <Route path="/admin" element={<Dashboard />} />
+        
+        {/* Project Detail Pages */}
+        <Route path="/projects/:slug" element={<ProjectPage />} />
         
         {/* Main Portfolio Route */}
         <Route path="/" element={

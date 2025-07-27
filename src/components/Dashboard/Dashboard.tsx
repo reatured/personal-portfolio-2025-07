@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Project } from '../../types/Project';
-import ProjectEditor from './ProjectEditor';
+import EnhancedProjectEditor from './EnhancedProjectEditor';
 import ImageUploader from './ImageUploader';
 import DeploymentPanel from './DeploymentPanel';
+import { SupabaseService } from '../../utils/supabase';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -17,43 +18,56 @@ const Dashboard: React.FC = () => {
 
   const loadProjects = async () => {
     try {
-      // Use DataManager for local data persistence
-      const { DataManager } = await import('../../utils/dataManager');
-      const loadedProjects = DataManager.loadProjects();
+      // Use Supabase for database persistence
+      const loadedProjects = await SupabaseService.getProjects();
       setProjects(loadedProjects);
     } catch (error) {
       console.error('Error loading projects:', error);
-      const { projects } = await import('../../data/projects');
-      setProjects(projects);
+      // Fallback to legacy data
+      try {
+        const { DataManager } = await import('../../utils/dataManager');
+        const legacyProjects = DataManager.loadProjects();
+        setProjects(legacyProjects);
+      } catch (legacyError) {
+        const { projects } = await import('../../data/projects');
+        setProjects(projects);
+      }
     }
   };
 
-  const saveProjects = async (updatedProjects: Project[]) => {
+  const handleProjectSave = async (project: Project) => {
     try {
-      const { DataManager } = await import('../../utils/dataManager');
-      DataManager.saveProjects(updatedProjects);
-      setProjects(updatedProjects);
-      alert('Projects saved successfully!');
+      let savedProject: Project;
+      
+      if (selectedProject?.id && selectedProject.id !== '') {
+        // Update existing project
+        savedProject = await SupabaseService.updateProject(project.id, project);
+      } else {
+        // Create new project
+        savedProject = await SupabaseService.createProject(project);
+      }
+      
+      // Reload projects to get fresh data
+      await loadProjects();
+      setSelectedProject(null);
+      setIsEditing(false);
+      alert('Project saved successfully!');
     } catch (error) {
-      console.error('Error saving projects:', error);
-      alert('Failed to save projects');
+      console.error('Error saving project:', error);
+      alert('Failed to save project: ' + (error as Error).message);
     }
   };
 
-  const handleProjectSave = (project: Project) => {
-    const updatedProjects = selectedProject?.id 
-      ? projects.map(p => p.id === project.id ? project : p)
-      : [...projects, { ...project, id: Date.now().toString() }];
-    
-    saveProjects(updatedProjects);
-    setSelectedProject(null);
-    setIsEditing(false);
-  };
-
-  const handleProjectDelete = (projectId: string) => {
+  const handleProjectDelete = async (projectId: string) => {
     if (window.confirm('Are you sure you want to delete this project?')) {
-      const updatedProjects = projects.filter(p => p.id !== projectId);
-      saveProjects(updatedProjects);
+      try {
+        await SupabaseService.deleteProject(projectId);
+        await loadProjects();
+        alert('Project deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting project:', error);
+        alert('Failed to delete project: ' + (error as Error).message);
+      }
     }
   };
 
@@ -62,9 +76,27 @@ const Dashboard: React.FC = () => {
       id: '',
       title: '',
       description: '',
-      techStack: [],
-      imagePath: '',
-      link: ''
+      markdown_content: '',
+      slug: '',
+      featured_image_url: '',
+      hover_image_url: '',
+      tech_stack: [],
+      page_layout: 'default',
+      status: 'draft',
+      featured: false,
+      order_index: projects.length,
+      tags: [],
+      live_url: '',
+      github_url: '',
+      case_study_url: '',
+      custom_css: '',
+      meta_title: '',
+      meta_description: '',
+      meta_keywords: '',
+      images: [],
+      sections: [],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     });
     setIsEditing(true);
   };
@@ -110,7 +142,13 @@ const Dashboard: React.FC = () => {
                 <div key={project.id} className="project-item">
                   <div className="project-info">
                     <h3>{project.title}</h3>
-                    <p>{project.description.substring(0, 100)}...</p>
+                    <p>{project.description?.substring(0, 100) || 'No description'}...</p>
+                    <div className="project-meta">
+                      <span className={`status-badge ${project.status || 'draft'}`}>
+                        {project.status || 'draft'}
+                      </span>
+                      {project.featured && <span className="featured-badge">⭐ Featured</span>}
+                    </div>
                   </div>
                   <div className="project-actions">
                     <button 
@@ -134,7 +172,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             {isEditing && selectedProject && (
-              <ProjectEditor
+              <EnhancedProjectEditor
                 project={selectedProject}
                 onSave={handleProjectSave}
                 onCancel={() => {

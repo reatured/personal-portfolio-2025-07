@@ -1,15 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Project } from '../../types/Project';
+import { Project, ProjectImage, TechStack } from '../../types/Project';
+import MarkdownEditor from './MarkdownEditor';
+import MultiImageUploader from './MultiImageUploader';
 
 interface ProjectEditorProps {
-  project: Project;
+  project: Partial<Project>;
   onSave: (project: Project) => void;
   onCancel: () => void;
 }
 
 const ProjectEditor: React.FC<ProjectEditorProps> = ({ project, onSave, onCancel }) => {
-  const [formData, setFormData] = useState<Project>(project);
+  const [formData, setFormData] = useState<Partial<Project>>({
+    title: '',
+    description: '',
+    markdown_content: '',
+    slug: '',
+    tech_stack: [],
+    page_layout: 'default',
+    status: 'draft',
+    featured: false,
+    order_index: 999,
+    tags: [],
+    images: [],
+    ...project
+  });
   const [techStackInput, setTechStackInput] = useState({ category: '', items: '' });
+  const [activeTab, setActiveTab] = useState<'basic' | 'content' | 'images' | 'layout' | 'seo'>('basic');
 
   useEffect(() => {
     setFormData(project);
