@@ -145,12 +145,12 @@ const MultiImageUploader: React.FC<MultiImageUploaderProps> = ({
     if (!window.confirm('Are you sure you want to delete this image?')) return;
 
     const imageToDelete = images.find(img => img.id === imageId);
-    if (imageToDelete?.settings?.public_id) {
-      // Delete from Cloudinary
+    if (imageToDelete?.url) {
+      // Delete from Vercel Blob
       try {
-        await CloudinaryService.deleteImage(imageToDelete.settings.public_id);
+        await VercelBlobService.deleteImage(imageToDelete.url);
       } catch (error) {
-        console.error('Failed to delete from Cloudinary:', error);
+        console.error('Failed to delete from Vercel Blob:', error);
       }
     }
 
